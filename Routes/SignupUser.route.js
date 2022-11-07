@@ -34,25 +34,28 @@ signupRoute.post("/login",async(req,res)=>{
     
     const {useName,email,password}=req.body;
     const user=await SignupModel.findOne({email})
-    console.log(user.password)
-    const hashed_password=user.password
-    bcrypt.compare(password, hashed_password, function(err, result) {
-        if(result){
-            jwt.sign({ email: email }, process.env.SECRET_KEY, function(err, token) {
-                if(err){
-                    res.send({"msg":"Sorry try again"})
-                }
-                else{
-                    res.send({"token":token})
-                }
-            });
-        }
-        else{
-            console.log(err)
-             res.send({"msg":"Something wrong try again"})
-        }
-    });
-    
+    if(user){
+        const hashed_password=user.password
+        bcrypt.compare(password, hashed_password, function(err, result) {
+            if(result){
+                jwt.sign({ email: email }, process.env.SECRET_KEY, function(err, token) {
+                    if(err){
+                        res.send({"msg":"Sorry try again"})
+                    }
+                    else{
+                        res.send({"token":token})
+                    }
+                });
+            }
+            else{
+                console.log(err)
+                 res.send({"msg":"Something wrong try again"})
+            }
+        });
+    }
+    else{
+        res.send({"msg":"user not found"})
+    }
 })
 module.exports={
     signupRoute

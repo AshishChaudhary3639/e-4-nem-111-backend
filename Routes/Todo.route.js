@@ -30,6 +30,23 @@ todoRoute.get("/gettodo", authentication,async(req,res)=>{
     }
 
 })
+
+
+
+todoRoute.put("/update/:_id",authentication,async(req,res)=>{
+    await TodoModel.updateOne(req.params,{
+        $set:req.body
+    })
+    res.send({"msg":"Data updated successfuly"})
+
+})
+
+
+todoRoute.delete("/delete/:_id",authentication,async(req,res)=>{
+    await TodoModel.deleteOne(req.params)
+    res.send({"msg":"Data delete successfuly"})
+
+})
 module.exports={
     todoRoute
 }

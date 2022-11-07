@@ -13,7 +13,6 @@ const authentication=(req,res,next)=>{
             const email=decoded.email
             const user= await SignupModel.findOne({email})
             req.body.userId=user._id
-            console.log("email",user)
             next()
         }
 
